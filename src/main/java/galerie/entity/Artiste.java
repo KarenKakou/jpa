@@ -1,10 +1,14 @@
 package galerie.entity;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,16 +20,10 @@ import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
 @Entity 
-public class Artiste {
+public class Artiste extends Personne{
 
-    @Id  @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private Integer id;
+	@OneToMany(mappedBy="auteur")
+    @ToString.Exclude
+    private List<Tableau> oeuvres = new LinkedList<>();
     
-    @Column
-    @NonNull
-    private String nom;
-    
-    @Column
-    @NonNull
-    private String adresse;
 }

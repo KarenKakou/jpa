@@ -5,7 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,8 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
 @Entity 
@@ -36,12 +40,29 @@ public class Exposition {
     @NonNull
     private int duree;
     
-    private ArrayList<Transaction> ventes;
+
+    @ManyToOne
+    @NonNull
+    Galerie organisateur;
+
+    @ManyToMany
+    @ToString.Exclude
+    List<Tableau> oeuvres = new LinkedList<>();
     
+    @OneToMany(mappedBy = "lieuDeVente")
+    @ToString.Exclude
+    private List<Transaction> ventes = new LinkedList<>();
     
-    
-    private int CA() {
-    	return 0;
+    public float CA() {
+        float result =0.0f;
+        for (Transaction vente : ventes) {
+        	 result = result + vente.getPrixVente();
+        }
+        return result;
+    }
+
+    public LocalDate getDebut() {
+    	return this.date;
     }
     
 }
